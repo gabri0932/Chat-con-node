@@ -1,12 +1,14 @@
 import express from "express";
 import logger from "morgan"; //morgan es un middleware que nos permite ver las peticiones que llegan al servidor
 import { Server } from "socket.io";
-import {createServer} from "node:http";
+import {createServer} from "node:http"; //servidor http nativo de nodejs
 
 
 const app = express()
 const server = createServer(app); //creamos el servidor http
-const io = new Server(server); //creamos el servidor de socket.io, servidor bidireccional
+const io = new Server(server, {
+    connectionStateRecovery: {}
+}); //creamos el servidor de socket.io, servidor bidireccional
 app.use(logger("dev")); //podemos ver las peticiones que llegan al servidor
 io.on("connection", (socket) => {
     console.log("a user connected") 
