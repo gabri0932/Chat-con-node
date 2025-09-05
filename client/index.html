@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><style>
- *,
- *::before,
- *::after{
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabriel Chats</title>
+    <style>
+    
+     *,
+     *::before,
+     *::after{
     box-sizing: border-box;
- }
- *body{
+     }
+     :root{
+    color-scheme: light dark;
+     }
+    *body{
     margin: 0;
     display: grid;
     place-content: center;
@@ -17,30 +25,83 @@
     grid-template-rows:1fr ;
  }
  #chat{
-    border: 1px solid black;
+    border: 1px solid white;
     border-radius: 4px;
     overflow: hidden;
-    height: 100%;
-    width: 400px;
+    height: 98vh;
+    width: 350px;
     position: relative;
+    left: 45%;
+ }
+ #form{
+    bottom: 0;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    padding: 4px;
+    position: absolute;
+    right: 0;
+
+ }
+ #input{
+    border-radius: 999px;
+    border: 1px solid #ccc;
+    flex: 1;
+    margin: 4px;
+    padding: 8px;
+    width: 50px;
+ }button{
+    position: absolute;
+    left: 84%;
+    top: 89%  ;
+    height: 20px;
+    border-radius: 10px;
+ }
+ #message{
+    margin: 0;
+    padding: 0;
+ }
+ #message>li{
+    padding: .5rem 1rem;
+    list-style: none;
+    padding: 5px;
+    margin: 0;
+
+ }
+ #message>li:nth-child(odd){
+    background: #004;
  }
 </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gabriel Chats</title>
+    
     <script type="module">
         import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
         const socket = io("http://localhost:8000");
 
-
+        const form = document.getElementById("form");
+        const input = document.getElementById("input");
+        const message = document.getElementById("message");
+        socket.on("chat message", (msg) => {
+           const item = `<li>${msg}</li>`;
+           message.insertAdjacentHTML("beforeend", item);   
+        });
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+           if(input.value){
+            socket.emit("chat message", input.value);
+            input.value = "";
+           }
+        });
     </script>
 </head>
 
 <body>
     <section id="chat">
-        <form action="">
-            <input type="text"  placeholder="Type a message..." style="width: 100%; padding: 10px; border: none; outline: none; position: absolute; bottom: 0;" /> 
-            <button type="submit">Enviar </button>
+        <ul id="message"></ul>
+        <form action="" id="form">
+            
+            <input id="input" type="text"  placeholder="Type a message..." style="width: 100%; padding: 10px; border: none; outline: none; position: absolute; bottom: 0;" /> 
+            <button type="submit">Enviar</button>
         </form>
     </section>
 </body>
