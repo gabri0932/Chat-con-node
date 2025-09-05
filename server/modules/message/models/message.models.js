@@ -34,7 +34,3 @@ export class MessageModels{
     }
 }
 
-(async()=>{
-    const message = await MessageModels.createMessage("Juan", "Hola, este es otro mensaje de prueba")
-    console.log(message)
-})()
