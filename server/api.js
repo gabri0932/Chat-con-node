@@ -2,6 +2,11 @@ import express from "express";
 import logger from "morgan"; //morgan es un middleware que nos permite ver las peticiones que llegan al servidor
 import { Server } from "socket.io";
 import {createServer} from "node:http"; //servidor http nativo de nodejs
+import { MessageModels } from "./modules/message/models/message.models.js";
+import { Db } from "mongodb";
+import { getMongoDB } from "./db/mConection.js";
+import { MongoErrorLabel } from "mongodb";
+
 
 
 const app = express()
@@ -16,9 +21,31 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {
         console.log("user disconnected")
     })
-    socket.on("chat message", (msg) => {
-        io.emit("chat message", msg) //emitimos el mensaje a todos los clientes conectados
+    socket.on("chat message",async (msg) => {
+        let result;
+        try{
+            result = await MessageModels.createMessage(msg)
+        }catch(error){
+            console.error(error)
+            return;
+        }
+        io.emit("chat message", msg ) //emitimos el mensaje a todos los clientes conectados
+    
     })
+    console.log(socket.handshake.auth)
+    if(!socket.recovered){
+        
+        //recuperar todos los mensajes sin conexion
+        try{
+            const result = (async()=>{
+                const result = await MessageModels.getMessages()
+                return result
+            })
+            return result
+        }catch(error){
+            console.error(error)
+        }
+    }
 });  
 
 app.use(express.json());

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gabriel Chats</title>
+   <link rel="icon" href="tools/images.jpg" >
+    <title>chat anonimo</title>
     <style>
     
      *,
@@ -73,7 +74,6 @@
     background: #004;
  }
 </style>
-    
     <script type="module">
         import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
         const socket = io("http://localhost:8000");
@@ -83,8 +83,16 @@
         const message = document.getElementById("message");
         socket.on("chat message", (msg) => {
            const item = `<li>${msg}</li>`;
-           message.insertAdjacentHTML("beforeend", item);   
+           message.insertAdjacentHTML("beforeend", item); 
+           socket.auth.serveroffset = serveroffset //cuando se reciba un nuevo mensaje se guarda  
         });
+        const sockets = io({
+         auth:{
+            token: 123,
+            username: null,
+            serveroffset: 0
+         }
+        })
         form.addEventListener("submit", (e) => {
             e.preventDefault();
            if(input.value){
