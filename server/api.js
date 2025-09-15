@@ -27,6 +27,7 @@ io.on("connection", (socket) => {
         let result;
         try{
             result = await MessageModels.createMessage(msg)
+                
         }catch(error){
             console.error(error)
             return;
@@ -39,10 +40,10 @@ io.on("connection", (socket) => {
         
         //recuperar todos los mensajes sin conexion
         try{
-            const result = (async()=>{
+            const result = async()=>{
                 const result = await MessageModels.getMessages()
                 return result
-            })
+            }
             return result
         }catch(error){
             console.error(error)
