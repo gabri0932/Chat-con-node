@@ -76,8 +76,13 @@
 </style>
     <script type="module">
         import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
-        const socket = io("http://localhost:8000");
-
+      //  dev const socket = io("http://localhost:8000");
+      // produccion
+      const socket = io("https://api-chatanonimo-deploy.onrender.com/",
+         {
+         transports: ["websocket", "polling"],
+         secure: true
+      })
         const form = document.getElementById("form");
         const input = document.getElementById("input");
         const message = document.getElementById("message");
