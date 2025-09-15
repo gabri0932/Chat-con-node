@@ -6,8 +6,9 @@ import { MessageModels } from "./modules/message/models/message.models.js";
 import { Db } from "mongodb";
 import { getMongoDB } from "./db/mConection.js";
 import { MongoErrorLabel } from "mongodb";
+import { corsMiddleware } from "./middleware/corsMiddleware.js";
 
-
+app.use(corsMiddleware)
 
 const app = express()
 const server = createServer(app); //creamos el servidor http
