@@ -3,7 +3,7 @@ import {server} from "./server/api.js";
 import  {io}  from "./server/api.js";
 
 
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT || 10000
 
 
 server.listen(PORT, ()=>{ 
