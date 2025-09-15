@@ -164,6 +164,7 @@
             align-items: center;
             justify-content: center;
             color: white;
+            font-weight: bold;
             font-size: 10px;
         }
 
@@ -247,7 +248,12 @@
         }
 
         .quick-reactions {
-            display: none;
+            display: flex;
+            gap: 8px;
+            padding: 8px 0;
+            justify-content: center;
+            border-top: 1px solid #f3f4f6;
+            margin-top: 8px;
         }
 
         .quick-reaction {
@@ -438,18 +444,26 @@
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </form>
+            <div class="quick-reactions">
+                <div class="quick-reaction" onclick="sendQuickMessage('👋 ¡Hola!')">👋</div>
+                <div class="quick-reaction" onclick="sendQuickMessage('😂 jajaja')">😂</div>
+                <div class="quick-reaction" onclick="sendQuickMessage('👍 Me gusta')">👍</div>
+                <div class="quick-reaction" onclick="sendQuickMessage('❤️ Love')">❤️</div>
+                <div class="quick-reaction" onclick="sendQuickMessage('🔥 Genial!')">🔥</div>
+            </div>
         </div>
     </div>
 
     <script type="module">
         import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
-        
-        // Configuración de Socket.IO
-         //const socket = io("http://localhost:8000");
-        const socket = io("https://api-chatanonimo-deploy.onrender.com/", {
-            transports: ["websocket", "polling"],
-            secure: true
-        });
+              //dev 
+              const socket = io("http://localhost:8000");
+
+      //   // Configuración de Socket.IO
+      //   const socket = io("https://api-chatanonimo-deploy.onrender.com/", {
+      //       transports: ["websocket", "polling"],
+      //       secure: true
+      //   });
 
         // Referencias DOM
         const messageForm = document.getElementById("messageForm");
@@ -463,11 +477,16 @@
         let isTyping = false;
         let typingTimeout;
         
+        // Array de avatares y colores aleatorios
+        const avatarColors = ['#4f46e5', '#7c3aed', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06d6a0'];
+        const reactions = ['👍', '❤️', '😂', '😮', '😢', '😡'];
+        
         // Función para generar avatar aleatorio
         function generateAvatar() {
-            const colors = ['#4f46e5', '#7c3aed', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06d6a0'];
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            return { color };
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const color = avatarColors[Math.floor(Math.random() * avatarColors.length)];
+            const letter = letters.charAt(Math.floor(Math.random() * letters.length));
+            return { letter, color };
         }
 
         // Función para obtener timestamp
@@ -510,7 +529,7 @@
             messageElement.innerHTML = `
                 <div class="message-header">
                     <div class="user-avatar" style="background: ${avatar.color}">
-                        <i class="fas fa-user"></i>
+                        ${avatar.letter}
                     </div>
                     <span class="message-time">${timestamp}</span>
                     <span class="message-count">${messageCount + 1}</span>
@@ -670,6 +689,16 @@
             username: null,
             serveroffset: 0
         };
+
+        // Función para enviar mensajes rápidos
+        function sendQuickMessage(message) {
+            if (!sendButton.disabled) {
+                socket.emit("chat message", message);
+            }
+        }
+
+        // Hacer la función global
+        window.sendQuickMessage = sendQuickMessage;
     </script>
 </body>
 </html>
