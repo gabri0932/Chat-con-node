@@ -8,9 +8,10 @@ import { getMongoDB } from "./db/mConection.js";
 import { MongoErrorLabel } from "mongodb";
 import { corsMiddleware } from "./middleware/corsMiddleware.js";
 
-app.use(corsMiddleware)
 
 const app = express()
+
+app.use(corsMiddleware)
 const server = createServer(app); //creamos el servidor http
 const io = new Server(server, {
     connectionStateRecovery: {}
