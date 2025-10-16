@@ -5,8 +5,8 @@ const collectionName = process.env.MESSAGES_COLLECTION
 export class MessageModels{
     static async createMessage(messages){
         try{
-            const db = await getMongoDB();
-            const collection = db.collection(collectionName)
+                const db = await getMongoDB();
+                const collection = db.collection(collectionName)
             const modelsMessage = { 
                 user: null,
                 message: messages,
