@@ -7,10 +7,12 @@ import { Db } from "mongodb";
 import { getMongoDB } from "./db/mConection.js";
 import { MongoErrorLabel } from "mongodb";
 import { corsMiddleware } from "./middleware/corsMiddleware.js";
+import authRouter from "./modules/auth/routes/auth.routes.js";
 
 
 const app = express()
-
+app.use(express.json())
+app.use(authRouter)
 app.use(corsMiddleware)
 const server = createServer(app); //creamos el servidor http
 const io = new Server(server, {

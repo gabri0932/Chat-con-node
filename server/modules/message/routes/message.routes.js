@@ -1,0 +1,1 @@
+import { AuthController } from "../../auth/controller/authController";
