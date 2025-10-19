@@ -5,20 +5,13 @@ const AuthKey = process.env.SECRET_KEY
 export class AuthController{
 
     static async ControllerLogin(req, res){
-        const {user, password, rol} = req.body
+        const {user, password} = req.body
         if(!user || !password){
             res.status(400).json({
                 status: 400,
                 message: "Bad Request"
             })
         }
-        
-        // if(rol != "Costumer" || rol != "Freelancer"){
-        //     res.status(400).json({
-        //         status: 400,
-        //         message: "Bad request"
-        //     })
-        // }
         try{
             const findUser = await authModels.getUserByCredentials({username: user, password})
             // console.log(findUser)
@@ -59,6 +52,4 @@ export class AuthController{
 
 }
 
-(async()=>{
 
-})
